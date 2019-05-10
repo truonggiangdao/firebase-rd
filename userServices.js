@@ -13,14 +13,14 @@ const firebaseConfig = require('./firebaseConfig.json');
 firebase.initializeApp(firebaseConfig);
 
 const db = admin.firestore();
-const auth = admin.auth();
+// const auth = admin.auth();
+const fbAuth = firebase.auth();
 
 async function addUserAuth(data) {
-	const dataAuth = await auth.createUser({
-		email : data.email,
-		password : data.password
-	});
-	return dataAuth;
+  console.log(data);
+  const dataAuth = await fbAuth.createUserWithEmailAndPassword(data.email, data.password);
+  console.log(dataAuth.user);
+	return dataAuth.user;
 }
 
 function addUserDB(profile) {
@@ -36,7 +36,7 @@ function addUserDB(profile) {
 
 const authenticate = (email, password) => {
   return new Promise((resolve, reject) => {
-    firebase.auth().signInWithEmailAndPassword(email, password).then(async data => {
+    fbAuth.signInWithEmailAndPassword(email, password).then(async data => {
       let infoUser = await getUserInfoFromDB(data.user);
       return resolve(infoUser);
     }).catch(err => {
@@ -60,7 +60,7 @@ const getUserInfoFromDB = (userInfo) => {
 }
 
 const logout = () => {
-  firebase.auth().signOut().then(() => {
+  fbAuth.signOut().then(() => {
     return 'Sign-out successful';
   }).catch(err => {
     return err;

@@ -34,8 +34,8 @@ app.post('/register', async (req, res) => {
 				phoneNumber: (dataJson.phone) ? dataJson.phone : null,
 				username: dataJson.username,
 				email: dataJson.email,
-				accessToken: null,
-				refreshToken: null
+				accessToken: userAuth.lat,
+				refreshToken: userAuth.refreshToken
 			}
 
 			userData = await userServices.addUserDB(profile);
