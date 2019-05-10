@@ -45,8 +45,12 @@ app.post('/register', async (req, res) => {
 		res.send(err);
 	}
 });
-
+app.get('/', (req, res) => {
+	res.send('Linh Dong');
+})
 app.post('/login', (req, res) => {
+  console.log('login worked');
+  
   let email = req.body.email;
   let password = req.body.password;
   let valid = userServices.authenticate(email , password);

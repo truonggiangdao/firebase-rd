@@ -1,6 +1,4 @@
-const firebase = require('firebase/app');
-require('firebase/auth');
-require('firebase/database');
+const firebase = require('firebase');
 const admin = require('firebase-admin');
 const serviceAccount = require("./serviceAccountKey.json");
 
@@ -13,8 +11,15 @@ const firebaseConfig = require('./firebaseConfig.json');
 firebase.initializeApp(firebaseConfig);
 
 const db = admin.firestore();
-// const auth = admin.auth();
+const auth = admin.auth();
 const fbAuth = firebase.auth();
+// async function addUserAuth(data) {
+// 	const dataAuth = await auth.createUser({
+// 		email : data.email,
+// 		password : data.password
+// 	});
+// 	return dataAuth;
+// }
 
 async function addUserAuth(data) {
   console.log(data);
@@ -36,7 +41,11 @@ function addUserDB(profile) {
 
 const authenticate = (email, password) => {
   return new Promise((resolve, reject) => {
+    console.log('Promise worked', fbAuth);
+    
     fbAuth.signInWithEmailAndPassword(email, password).then(async data => {
+      console.log('signInWithEmailAndPassword worked');
+      
       let infoUser = await getUserInfoFromDB(data.user);
       return resolve(infoUser);
     }).catch(err => {
